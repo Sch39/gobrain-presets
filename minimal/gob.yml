@@ -1,0 +1,60 @@
+version: "1.0.0"
+project:
+  name: "{{ .ProjectName }}"
+  module: "{{ .ModuleName }}"
+  toolchain: "1.23.0"
+meta:
+  template_origin: "minimal"
+  author: "default preset"
+tools:
+  - name: "air"
+    pkg: "github.com/air-verse/air@latest"
+scripts:
+  dev: "air"
+  test: "go test ./... -cover"
+generators:
+  requires:
+    - "github.com/google/uuid"
+  commands:
+    entity:
+      description: "Create a new entity"
+      args:
+        - name
+      templates:
+        - src: ".template/entity.tpl"
+          dest: "internal/domain/{{ .Name | lower }}.go"
+    repository:
+      description: "Create a new repository"
+      args:
+        - name
+        - entity
+      templates:
+        - src: ".template/repository.tpl"
+          dest: "internal/repository/{{ .Name | lower }}_repository.go"
+    service:
+      description: "Create a new service"
+      args:
+        - name
+        - entity
+      templates:
+        - src: ".template/service.tpl"
+          dest: "internal/service/{{ .Name | lower }}_service.go"
+verify:
+  fail_fast: true
+  pipeline:
+    - name: "Format"
+      run: "go fmt ./..."
+    - name: "Unit Testing"
+      run: "go test ./... -short"
+layout:
+  directories:
+    - "cmd/{{ .ProjectName }}/api"
+    - "internal/domain"
+    - "internal/repository"
+    - "internal/service"
+    - "internal/handler"
+    - "internal/middleware"
+    - "internal/config"
+    - "pkg/response"
+    - "pkg/request"
+

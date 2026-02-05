@@ -1,0 +1,24 @@
+/.cache/
+/bin/
+/build/
+/dist/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.dll
+*.dylib
+*.exe
+*.log
+*.so
+*.test
+coverage.out
+tmp/
+.env
+.env.local
+.env.*
+.envrc
+vendor/
+# === BEGIN GOBRAIN MANAGED ===
+.gob/
+# === END GOBRAIN MANAGED ===
