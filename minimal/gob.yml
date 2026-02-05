@@ -39,6 +39,13 @@ generators:
       templates:
         - src: ".template/service.tpl"
           dest: "internal/service/{{ .Name | lower }}_service.go"
+    handler:
+      description: "Create a new HTTP handler"
+      args:
+        - name
+      templates:
+        - src: ".template/handler.tpl"
+          dest: "internal/handler/{{ .Name | lower }}_handler.go"
 verify:
   fail_fast: true
   pipeline:
