@@ -1,0 +1,9 @@
+root = "."
+tmp_dir = "tmp"
+[build]
+cmd = "go build -o ./tmp/{{ .ProjectName }}.exe ./cmd/{{ .ProjectName }}/api"
+bin = "tmp/{{ .ProjectName }}.exe"
+include_ext = ["go"]
+exclude_dir = [".git",".gob",".template","vendor","bin","build","dist",".idea",".vscode","tmp"]
+[log]
+time = true

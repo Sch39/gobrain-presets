@@ -1,0 +1,24 @@
+run:
+  timeout: 5m
+  tests: true
+  skip-dirs:
+    - vendor
+    - .gob
+    - .template
+    - bin
+    - build
+    - dist
+    - .idea
+    - .vscode
+    - tmp
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - gofmt
+    - goimports
+    - revive
+issues:
+  exclude-use-default: false
