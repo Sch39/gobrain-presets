@@ -9,18 +9,18 @@ import (
 	"{{ .ModuleName }}/pkg/response"
 )
 
-type {{ .Name | lower }}Handler struct {
-	svc service.{{ .Name }}Service
+type {{ pascal_case .Name }}Handler struct {
+	svc service.{{ pascal_case .Name }}Service
 }
 
-func New{{ .Name }}Handler(svc service.{{ .Name }}Service) *{{ .Name | lower }}Handler {
-	return &{{ .Name | lower }}Handler{svc: svc}
+func New{{ pascal_case .Name }}Handler(svc service.{{ pascal_case .Name }}Service) *{{ pascal_case .Name }}Handler {
+	return &{{ pascal_case .Name }}Handler{svc: svc}
 }
 
-func (h *{{ .Name | lower }}Handler) Fetch(w http.ResponseWriter, r *http.Request) {
+func (h *{{ pascal_case .Name }}Handler) Fetch(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	limit, offset := parsePagination(r)
-	items, total, err := h.svc.Fetch{{ .Name }}s(ctx, limit, offset)
+	items, total, err := h.svc.Fetch{{ pascal_case .Name }}s(ctx, limit, offset)
 	if err != nil {
 		response.Error(w, http.StatusInternalServerError, "fetch_failed")
 		return

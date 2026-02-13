@@ -3,19 +3,28 @@ debug: false
 project:
   name: "{{ .ProjectName }}"
   module: "{{ .ModuleName }}"
-  toolchain: "1.23.0"
+  toolchain: "1.24.2"
 meta:
-  template_origin: "minimal"
-  author: "default preset"
+  template_origin: "https://github.com/Sch39/gobrain-presets.git"
+  author: "sch39"
+  path: "minimal"
 tools:
   - name: "air"
     pkg: "github.com/air-verse/air@latest"
+  - name: "golangci-lint"
+    pkg: "github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
 scripts:
-  dev: "air"
-  test: "go test ./... -cover"
+  dev:
+    - "air"
+  build:
+    - "go build ./..."
+  lint:
+    - "golangci-lint run"
+  test:
+    - "go test ./... -cover"
 generators:
   requires:
-    - "github.com/google/uuid"
+    - "github.com/Masterminds/sprig@latest"
   commands:
     entity:
       desc: "Create a new entity"
@@ -23,7 +32,7 @@ generators:
         - name
       templates:
         - src: ".template/entity.tpl"
-          dest: "internal/domain/{{ .Name | lower }}.go"
+          dest: "internal/domain/{{ .Name }}.go"
     repository:
       desc: "Create a new repository"
       args:
@@ -31,7 +40,7 @@ generators:
         - entity
       templates:
         - src: ".template/repository.tpl"
-          dest: "internal/repository/{{ .Name | lower }}_repository.go"
+          dest: "internal/repository/{{ .Name }}.go"
     service:
       desc: "Create a new service"
       args:
@@ -39,19 +48,23 @@ generators:
         - entity
       templates:
         - src: ".template/service.tpl"
-          dest: "internal/service/{{ .Name | lower }}_service.go"
+          dest: "internal/service/{{ .Name }}.go"
     handler:
       desc: "Create a new HTTP handler"
       args:
         - name
       templates:
         - src: ".template/handler.tpl"
-          dest: "internal/handler/{{ .Name | lower }}_handler.go"
+          dest: "internal/handler/{{ .Name }}.go"
 verify:
   fail_fast: true
   pipeline:
     - name: "Format"
       run: "go fmt ./..."
+    - name: "Vet"
+      run: "go vet ./..."
+    - name: "Lint"
+      run: "golangci-lint run"
     - name: "Unit Testing"
       run: "go test ./... -short"
 layout:
